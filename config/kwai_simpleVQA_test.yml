@@ -1,0 +1,47 @@
+name: swin_small
+num_epochs: 50
+l_num_epochs: 0
+warmup_epochs: 2.5
+ema: true
+save_model: true
+batch_size: 16
+num_workers: 6
+
+
+data:  
+    
+    
+    val:
+        type: ViewDecompositionDataset
+        args:
+            phase: test
+            anno_file:  data/test_data.csv
+            data_prefix: data/
+            sample_types: 
+                technical:
+                    resize: 520
+                    crop: 448
+                    clip_len: 8
+                    frame_interval: 10
+                    t_frag: 8
+                    num_clips: 1
+            
+
+model:
+    type: swin_small
+    args:
+        swin_small:
+            backbone:
+            head:
+                in_channels: 768
+                hidden_channels: 128
+            
+optimizer:
+    lr: !!float 3e-5
+    backbone_lr_mult: !!float 1
+    wd: 0.05
+        
+load_path: checkpoint/swin_head_val-ltest_s_finetuned.pth
+test_load_path:  checkpoint/swin_head_val-ltest_s_finetuned.pth
+    
+        
